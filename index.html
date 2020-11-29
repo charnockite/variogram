@@ -40,8 +40,20 @@
                 })
               </script>
             </div>
-              <button type="button" id="read-button" class="btn btn-primary" v-on:click="updatePoints">Read file</button>
+              <button type="button" id="read-button" class="btn btn-primary w-25 p-2" v-on:click="updatePoints">Read file</button>
             <div id="appDisplay">
+              <div class="input-group mb-3">
+                <input v-model ="azimuth">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" v-on:click="updateLag">Update azimuth</button>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <input v-model ="tolerance">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" v-on:click="updateLag">Update tolerance</button>
+                </div>
+              </div>
               <div class="input-group mb-3">
                 <input v-model ="lagDistance">
                 <div class="input-group-append">
