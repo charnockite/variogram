@@ -99,23 +99,25 @@ function calculateVariogram(data, lagDistance, numberOfLags, azimuth, tolerance)
     //console.log(valueCount)
     //reduce distance map and add to results
     let reduced = azimuthFiltered.reduce(reduceForLag, 0);
-    let results = {"lagNumber":i,"lagDistance":i*lagDistance,"semivariance":reduced/valueCount};
+    let results = {"lagNumber":i,"lagDistance":i*lagDistance,"semivariance":reduced/valueCount, "count":valueCount};
     output.push(results);
   }
   //prepare for plotting
-  let plotOutput = {"lagNumber":[],"lagDistance":[],"semivariance":[]};
+  let plotOutput = {"lagNumber":[],"lagDistance":[],"semivariance":[],"countPerLag":[]};
   output.forEach(function(item, index, array){
     plotOutput["lagNumber"].push(item["lagNumber"]);
     plotOutput["lagDistance"].push(item["lagDistance"]);
     plotOutput["semivariance"].push(item["semivariance"]);
+    plotOutput["countPerLag"].push(item["count"])
   })
   return plotOutput;
 }
 
 function loadData(string){
   let dataObject = []
-  let stringArray = string.split(/\r\n/);
+  let stringArray = string.split(/\n/);
   let dataArray = stringArray.map(x=>x.split(","))
+  console.log(dataArray)
   dataArray.forEach(element => dataObject.push({"x":element[0],"y":element[1],"value":element[2]}))
   variogramDisplay.updatePoints(dataObject.slice(1))
 }
@@ -154,13 +156,15 @@ var variogramDisplay = new Vue({
     numberOfLags: 0,
     azimuth: 0,
     tolerance: 360,
-    results: {"numberOfLags":0,"lagDistance":0,"semivariance":0}
+    results: {"numberOfLags":0,"lagDistance":0,"semivariance":0,"countPerLag":0},
+    sillVariance : 0
   },
   methods: {
     updateLag: function (){
       let results = calculateVariogram(this.pointData,this.lagDistance, this.numberOfLags, this.azimuth, this.tolerance)
       this.results = results
       renderPlot(results)
+      renderHistogram(results)
   },
     updatePoints: function (newPoints){
       this.pointData = newPoints;
@@ -174,10 +178,25 @@ var variogramDisplay = new Vue({
 function renderPlot(data){
   let plotData = {
     x: data["lagDistance"],
-    y: data["semivariance"]
+    y: data["semivariance"],
+    type:'scatter'
   };
+  let layout = {}
+  let config = {responsive: true}
   divPlot = document.getElementById('plotDiv');
-  Plotly.newPlot(divPlot,[plotData])
+  Plotly.newPlot(divPlot,[plotData], layout, config)
+}
+
+function renderHistogram(data){
+  let histogramData = {
+    x: data["lagDistance"],
+    y: data["countPerLag"],
+    type:'bar'
+  }
+  let layout = {}
+  let config = {responsive: true}
+  divPlot = document.getElementById('histoDiv');
+  Plotly.newPlot(divPlot,[histogramData], layout, config)
 }
 
 function renderMap(data){
@@ -186,10 +205,12 @@ function renderMap(data){
     y: data["y"],
     mode: 'markers',
     marker: {
-      size:2,
+      size:4,
       color:data["value"]
     }
-  };
+  }
+  let layout = {}
+  let config = {responsive: true}
   divPlot = document.getElementById('mapDiv');
-  Plotly.newPlot(divPlot,[plotData])
+  Plotly.newPlot(divPlot,[plotData],layout,config)
 }
