@@ -117,7 +117,7 @@ function loadData(string){
   let dataObject = []
   let stringArray = string.split(/\n/);
   let dataArray = stringArray.map(x=>x.split(","))
-  console.log(dataArray)
+  //console.log(dataArray)
   dataArray.forEach(element => dataObject.push({"x":element[0],"y":element[1],"value":element[2]}))
   variogramDisplay.updatePoints(dataObject.slice(1))
 }
