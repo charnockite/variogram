@@ -181,7 +181,7 @@ function renderPlot(data){
     y: data["semivariance"],
     type:'scatter'
   };
-  let layout = {}
+  let layout = {margin:{t:25,l:25,r:25,b:25}}
   let config = {responsive: true}
   divPlot = document.getElementById('plotDiv');
   Plotly.newPlot(divPlot,[plotData], layout, config)
@@ -193,7 +193,7 @@ function renderHistogram(data){
     y: data["countPerLag"],
     type:'bar'
   }
-  let layout = {}
+  let layout = {margin:{t:25,l:25,r:25,b:25}}
   let config = {responsive: true}
   divPlot = document.getElementById('histoDiv');
   Plotly.newPlot(divPlot,[histogramData], layout, config)
@@ -209,7 +209,7 @@ function renderMap(data){
       color:data["value"]
     }
   }
-  let layout = {}
+  let layout = {margin:{t:30,l:30,r:30,b:30}}
   let config = {responsive: true}
   divPlot = document.getElementById('mapDiv');
   Plotly.newPlot(divPlot,[plotData],layout,config)
