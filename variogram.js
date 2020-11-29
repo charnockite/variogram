@@ -115,6 +115,8 @@ function calculateVariogram(data, lagDistance, numberOfLags, azimuth, tolerance)
 
 function loadData(string){
   let dataObject = []
+  const regex = /\r/;
+  let filteredArray = string.replace(regex, '')
   let stringArray = string.split(/\n/);
   let dataArray = stringArray.map(x=>x.split(","))
   //console.log(dataArray)
