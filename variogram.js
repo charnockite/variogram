@@ -291,8 +291,11 @@ function renderPlot(data){
     y: data["semivariance"],
     type:'scatter'
   };
+  //get furthest lag
+  let xmax = data["lagDistance"][data["lagDistance"].length - 1]
   let layout = {
     margin:{t:25,l:25,r:25,b:25},
+    xaxis: {range : [-1,xmax]},
     shapes: [
       {
         type: 'line',
