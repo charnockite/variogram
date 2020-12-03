@@ -265,7 +265,12 @@ var variogramDisplay = new Vue({
     azimuth: 0,
     tolerance: 360,
     results: {"numberOfLags":0,"lagDistance":0,"semivariance":0,"countPerLag":0},
-    sillVariance : 0
+    sillVariance : 0,
+    modelRange: 0,
+    modelSill: 0,
+    modelNugget: 0,
+    modelVariogram: {"lagDistance":0,"modelSemivariances":0},
+    hasModel: false
   },
   methods: {
     updateLag: function (){
@@ -281,16 +286,48 @@ var variogramDisplay = new Vue({
       this.mapData = makeMapFromPoints(newPoints);
       renderMap(this.mapData)
       this.updateLag;
+  },
+    calculateModelVariogram: function(){
+      //plots model variogram
+      function variogramModel(lagDistance, nugget, range, sill){
+        //return semivariance for lagDistance
+        let semivariance = sill;
+        if (lagDistance <= range){
+          //havent reached range yet
+          //calculate semivariance
+          let structureVariance = sill - nugget;
+          let secondTerm = structureVariance*((1.5 * (lagDistance/range)) - (0.5 * (Math.pow((lagDistance/range),3))))
+          semivariance = nugget + secondTerm;
+        } else {
+          //past range, semivar = nugget + sill
+          semivariance = sill;
+        }
+        return semivariance
+      }
+    let lagDistances = this.results["lagDistance"];
+    let modelSemivariances = lagDistances.map(lagDistance => variogramModel(Number(lagDistance), Number(this.modelNugget), Number(this.modelRange),Number(this.modelSill)));
+    //add nugget
+    lagDistances = [0].concat(lagDistances)
+    modelSemivariances = [Number(this.modelNugget)].concat(modelSemivariances)
+    this.modelVariogram= {"lagDistance":lagDistances,"modelSemivariances":modelSemivariances};
+    this.hasModel = true
+  },
+    updateModel: function(){
+      this.calculateModelVariogram();
+      renderPlotAndModel(this.results, this.modelVariogram);
     }
-}
+  }
 })
 
+
 function renderPlot(data){
-  let plotData = {
+  let plotData = [{
     x: data["lagDistance"],
     y: data["semivariance"],
+    mode:'markers',
     type:'scatter'
-  };
+  }];
+
   //get furthest lag
   let xmax = data["lagDistance"][data["lagDistance"].length - 1]
   let layout = {
@@ -314,7 +351,52 @@ function renderPlot(data){
   }
   let config = {responsive: true}
   divPlot = document.getElementById('plotDiv');
-  Plotly.newPlot(divPlot,[plotData], layout, config)
+  Plotly.newPlot(divPlot, plotData, layout, config)
+}
+
+function renderPlotAndModel(data, modelVariogram){
+
+  let empData = [{
+    x: data["lagDistance"],
+    y: data["semivariance"],
+    name:'Experimental variogram',
+    mode:'markers',
+    type:'scatter'}
+  ]
+    //add series for the model
+  var modelTrace = {
+    x: modelVariogram["lagDistance"],
+    y: modelVariogram["modelSemivariances"],
+    name:'Model variogram',
+    type: 'scatter'}
+
+  let plotData = empData.concat([modelTrace])
+  console.log(plotData)
+  //get furthest lag
+  let xmax = data["lagDistance"][data["lagDistance"].length - 1]
+  let layout = {
+    margin:{t:25,l:25,r:25,b:25},
+    xaxis: {range : [-1,xmax]},
+    shapes: [
+      {
+        name: 'Sample variance',
+        type: 'line',
+        xref: 'paper',
+        x0: 0,
+        y0: data["sillVariance"],
+        x1: 1,
+        y1: data["sillVariance"],
+        line:{
+          color: 'green',
+          width: 1,
+          dash:'dash'
+        }
+      }
+    ]
+  }
+  let config = {responsive: true}
+  divPlot = document.getElementById('plotDiv');
+  Plotly.newPlot(divPlot, plotData, layout, config)
 }
 
 function renderHistogram(data){

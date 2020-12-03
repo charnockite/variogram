@@ -27,8 +27,8 @@
       </div>
       <div class="card">
         <div class="card-header">Input</div>
-          <div class="row">
-            <div class="col">
+          <div class="row mx-auto">
+            <div class="col mx-auto">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="uploadFile">Upload</span>
@@ -48,9 +48,9 @@
               </div>
             </div>
           </div>
-          <div class="row mx-auto">
-            <div class="col mx-auto">
-              <div id="appDisplay">
+          <div id="appDisplay">
+            <div class="row mx-auto">
+              <div class="col mx-auto">
                 <div class="input-group mb-3">
                   <input v-model ="azimuth">
                   <div class="input-group-append">
@@ -64,17 +64,42 @@
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input v-model ="lagDistance">
+                  <input v-model ="numberOfLags">
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary" v-on:click="updateLag">Update number of lags</button>
                   </div>
                 </div>
+              </div>
+              <div class="col mx-auto">
                 <div class="input-group mb-3">
-                  <input v-model = "numberOfLags">
+                  <input v-model = "lagDistance">
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary" v-on:click="updateLag">Update lag distance</button>
                   </div>
                 </div>
+                <div class="input-group mb3">
+                  <input v-model = "modelRange">
+                  <div class="input-group-append">
+                    Model range
+                  </div>
+                </div>
+                <div class="input-group mb3">
+                  <input v-model = "modelSill">
+                  <div class="input-group-append">
+                    Model sill
+                  </div>
+                </div>
+                <div class="input-group mb3">
+                  <input v-model = "modelNugget">
+                  <div class="input-group-append">
+                    Model nugget
+                  </div>
+                </div>
+                  <div class="input-group mb3">
+                    <button class="btn btn-outline-secondary" v-on:click="updateModel">Update model variogram</button>
+                  </div>
+                </div>
+              </div>
               </div>
             </div>
             <div class="col mx-auto">
