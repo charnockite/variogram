@@ -15,6 +15,8 @@ function getSampleVarianceForDataset(samples){
   n = samples.length;
   //get mean
   function reducer(acc, value){
+    console.log(value)
+    console.log(value["value"])
      return acc + (value["value"]/n);
   };
   let mean = samples.reduce(reducer, 0);
@@ -225,7 +227,9 @@ function loadData(string){
   let filteredArray = string.replace(regex, '')
   let stringArray = string.split(/\n/);
   let dataArray = stringArray.map(x=>x.split(","))
-  dataArray.forEach(element => dataObject.push({"x":element[0],"y":element[1],"value":element[2]}))
+  //check for empty values
+  let filtered = dataArray.filter(element => (typeof element[0] !== 'undefined' && typeof element[1] !== 'undefined' && typeof element[2] !== 'undefined'))
+  filtered.forEach(element => dataObject.push({"x":element[0],"y":element[1],"value":element[2]}))
   variogramDisplay.updatePoints(dataObject.slice(1))
 }
 
@@ -243,7 +247,6 @@ function makeMapFromPoints(points){
   return {"x":xList,"y":yList,"value":valueList}
 }
 
-if (!DEV_MODE){
 document.querySelector("#read-button").addEventListener('click', function(){
   let file = document.querySelector("#file-input").files[0];
   let reader = new FileReader();
@@ -277,6 +280,7 @@ var variogramDisplay = new Vue({
       let results = calculateVariogram(this.pointData,this.lagDistance, this.numberOfLags, this.azimuth, this.tolerance)
       this.results = results
       this.sillVariance = getSampleVarianceForDataset(this.pointData)
+      this.modelSill = this.sillVariance
       results["sillVariance"] = this.sillVariance
       renderPlot(results)
       renderHistogram(results)
@@ -330,9 +334,11 @@ function renderPlot(data){
 
   //get furthest lag
   let xmax = data["lagDistance"][data["lagDistance"].length - 1]
+  let ymax = data["semivariance"][data["semivariance"].length -1]
   let layout = {
     margin:{t:25,l:25,r:25,b:25},
-    xaxis: {range : [-1,xmax]},
+    xaxis: {range : [-1,xmax*1.1]},
+    yaxis: {range: [-0.05, ymax*1.1]},
     shapes: [
       {
         type: 'line',
@@ -411,7 +417,7 @@ function renderHistogram(data){
     y: data["countPerLag"],
     type:'bar'
   }
-  let layout = {margin:{t:25,l:25,r:25,b:25}}
+  let layout = {margin:{t:30,l:30,r:30,b:30}}
   let config = {responsive: true}
   divPlot = document.getElementById('histoDiv');
   Plotly.newPlot(divPlot,[histogramData], layout, config)
@@ -431,5 +437,4 @@ function renderMap(data){
   let config = {responsive: true}
   divPlot = document.getElementById('mapDiv');
   Plotly.newPlot(divPlot,[plotData],layout,config)
-}
 }
