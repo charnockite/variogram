@@ -377,6 +377,12 @@ function renderPlotAndModel(data, modelVariogram){
   let layout = {
     margin:{t:25,l:25,r:25,b:25},
     xaxis: {range : [-1,xmax]},
+    legend:{
+      yanchor:"bottom",
+      y:0.01,
+      xanchor:"right",
+      x:0.99
+    },
     shapes: [
       {
         name: 'Sample variance',

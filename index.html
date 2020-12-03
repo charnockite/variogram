@@ -27,7 +27,7 @@
       </div>
       <div class="card">
         <div class="card-header">Input</div>
-          <div class="row mx-auto">
+          <div class="row mx-auto mt-1">
             <div class="col mx-auto">
               <div class="input-group">
                 <div class="input-group-prepend">
@@ -48,66 +48,81 @@
               </div>
             </div>
           </div>
+          <div class="row mx-auto mt-1">
+            <div class="col mx-auto">
+              <button type="button" id="read-button" class="btn btn-primary">Read file</button>
+            </div>
+          </div>
+        </div>
           <div id="appDisplay">
-            <div class="row mx-auto">
+            <div class="row mx-auto mt-1">
               <div class="col mx-auto">
                 <div class="input-group mb-3">
-                  <input v-model ="azimuth">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" v-on:click="updateLag">Update azimuth</button>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Azimuth</span>
                   </div>
+                  <input v-model ="azimuth" id="azimuth">
+
                 </div>
                 <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Tolerance</span>
+                  </div>
                   <input v-model ="tolerance">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" v-on:click="updateLag">Update tolerance</button>
-                  </div>
                 </div>
                 <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Number of lags</span>
+                  </div>
                   <input v-model ="numberOfLags">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" v-on:click="updateLag">Update number of lags</button>
-                  </div>
+
                 </div>
-              </div>
-              <div class="col mx-auto">
-                <div class="input-group mb-3">
-                  <input v-model = "lagDistance">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" v-on:click="updateLag">Update lag distance</button>
-                  </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Lag distance</span>
                 </div>
-                <div class="input-group mb3">
-                  <input v-model = "modelRange">
-                  <div class="input-group-append">
-                    Model range
-                  </div>
-                </div>
-                <div class="input-group mb3">
-                  <input v-model = "modelSill">
-                  <div class="input-group-append">
-                    Model sill
-                  </div>
-                </div>
-                <div class="input-group mb3">
-                  <input v-model = "modelNugget">
-                  <div class="input-group-append">
-                    Model nugget
-                  </div>
-                </div>
-                  <div class="input-group mb3">
-                    <button class="btn btn-outline-secondary" v-on:click="updateModel">Update model variogram</button>
-                  </div>
-                </div>
-              </div>
+                <input v-model = "lagDistance">
+
               </div>
             </div>
             <div class="col mx-auto">
-              <button type="button" id="read-button" class="btn btn-primary" v-on:click="updatePoints">Read file</button>
+              <div class="input-group mb3">
+                <button class="btn btn-primary" v-on:click="updateLag">Update experimental variogram</button>
+              </div>
             </div>
+              <div class="col mx-auto">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Model range</span>
+                  </div>
+                  <input v-model = "modelRange">
+
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Model sill</span>
+                  </div>
+                  <input v-model = "modelSill">
+
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Model nugget</span>
+                  </div>
+                  <input v-model = "modelNugget">
+
+                </div>
+              </div>
+              <div class="col mx-auto">
+                  <div class="input-group mb3">
+                    <button class="btn btn-primary" v-on:click="updateModel">Update model variogram</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+
           </div>
       </div>
-    </div>
   <script src="variogram.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
